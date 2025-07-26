@@ -1,8 +1,8 @@
 import { Events, GuildMember, Interaction, Message, MessageFlags, ModalSubmitInteraction } from 'discord.js';
-import { ServerUtility } from '../../utility/ServerUtility.js';
-import { EmbedManager } from '../../utility/EmbedManager.js';
-import { Messages } from '../../utility/Messages.js';
-import { ConfigManager } from '../../utility/ConfigManager.js';
+import { ServerUtility } from '../../utility/ServerUtility.ts';
+import { EmbedManager } from '../../utility/EmbedManager.ts';
+import { Messages } from '../../utility/Messages.ts';
+import { ConfigManager } from '../../utility/ConfigManager.ts';
 
 export default {
 	name: Events.InteractionCreate,

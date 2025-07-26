@@ -1,7 +1,7 @@
 import { Events, Message, MessageFlags, MessageReaction, PartialUser, User } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility.js';
-import { ParticipationStatus } from '../objects/Mission.js';
-import { ConfigManager } from '../utility/ConfigManager.js';
+import { ServerUtility } from '../utility/ServerUtility.ts';
+import { ParticipationStatus } from '../objects/Mission.ts';
+import { ConfigManager } from '../utility/ConfigManager.ts';
 
 const emojiStatusMap = new Map([
 	['🍞', 'joining'],

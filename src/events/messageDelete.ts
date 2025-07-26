@@ -1,6 +1,6 @@
 import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
-import { SkynetClient } from '../objects/SkynetClient.js';
-import { ConfigManager } from '../utility/ConfigManager.js';
+import { SkynetClient } from '../objects/SkynetClient';
+import { ConfigManager } from '../utility/ConfigManager.ts';
 
 export default {
 	name: Events.MessageDelete,

@@ -13,9 +13,9 @@ import {
 	TextInputBuilder,
 	TextInputStyle,
 } from 'discord.js';
-import { Messages } from '../../utility/Messages.js';
-import { EmbedManager } from '../../utility/EmbedManager.js';
-import { ServerUtility } from '../../utility/ServerUtility.js';
+import { Messages } from '../../utility/Messages.ts';
+import { EmbedManager } from '../../utility/EmbedManager.ts';
+import { ServerUtility } from '../../utility/ServerUtility.ts';
 
 const interactions = new Set([
 	'edit_admin_role',
