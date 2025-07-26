@@ -1,5 +1,4 @@
 import { ChatInputCommandInteraction, Collection, Events, GuildMember, Interaction, MessageFlags } from 'discord.js';
-import { SkynetClient } from '../objects/SkynetClient';
 import { ServerUtility } from '../utility/ServerUtility';
 import { Messages } from '../utility/Messages';
 
