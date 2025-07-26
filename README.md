@@ -31,22 +31,25 @@ src/
 - TypeScript (`tsc`)
 - `discord.js` v14
 
-- 🗺️ Localization
+## 🗺️ Localization
 
 Skynet supports multiple languages. To add or edit a language, modify:
 
-src/locale/messages.ts
+`src/locale/messages.ts`
 
 Each message key maps to a localized string per language code (en, pl, de, etc.).
-🔐 Permissions
+
+## 🔐 Permissions
 
 Admin-only interactions check for the configured admin role, which can be set via the bot's UI using role select menus.
-📜 Example Usage
+
+## 📜 Example Usage
     `/config — View current configuration`
 
-🧪 Testing
+## 🧪 Testing
 
 You can test the bot by inviting it to a test server and using the configured admin role.
-🤝 Contributing
+
+## 🤝 Contributing
 
 Feel free to fork the project and open a pull request! Use conventional commits and include descriptions for major changes.
