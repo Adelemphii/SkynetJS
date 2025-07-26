@@ -1,4 +1,4 @@
-import { ScheduleConfig } from './ScheduleConfig';
+import { ScheduleConfig } from './ScheduleConfig.js';
 
 export class GuildConfig {
 

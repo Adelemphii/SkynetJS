@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 
-module.exports = {
+export default {
 	cooldown: 5,
 	data: new SlashCommandBuilder()
 		.setName('ping')

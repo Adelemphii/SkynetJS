@@ -13,9 +13,9 @@ import {
 	TextInputBuilder,
 	TextInputStyle,
 } from 'discord.js';
-import { Messages } from '../../utility/Messages';
-import { EmbedManager } from '../../utility/EmbedManager';
-import { ServerUtility } from '../../utility/ServerUtility';
+import { Messages } from '../../utility/Messages.js';
+import { EmbedManager } from '../../utility/EmbedManager.js';
+import { ServerUtility } from '../../utility/ServerUtility.js';
 
 const interactions = new Set([
 	'edit_admin_role',
@@ -27,7 +27,7 @@ const interactions = new Set([
 	'go_back_serverinfo'
 ]); // im over it
 
-module.exports = {
+export default {
 	name: Events.InteractionCreate,
 	async execute(rawInteraction: Interaction) {
 		if(!rawInteraction.isButton()) return;

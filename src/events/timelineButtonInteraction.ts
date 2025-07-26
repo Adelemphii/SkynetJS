@@ -1,10 +1,10 @@
 import { ButtonInteraction, Events, Interaction, MessageFlags, TextChannel } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility';
-import { Messages } from '../utility/Messages';
-import { Mission, ParticipationStatus } from '../objects/Mission';
-import { ConfigManager } from '../utility/ConfigManager';
-import { GuildConfig } from '../objects/GuildConfig';
-import { SkynetClient } from '../objects/SkynetClient';
+import { ServerUtility } from '../utility/ServerUtility.js';
+import { Messages } from '../utility/Messages.js';
+import { Mission, ParticipationStatus } from '../objects/Mission.js';
+import { ConfigManager } from '../utility/ConfigManager.js';
+import { GuildConfig } from '../objects/GuildConfig.js';
+import { SkynetClient } from '../objects/SkynetClient.js';
 
 const interactions = new Set([
 	'mission_join',
@@ -12,7 +12,7 @@ const interactions = new Set([
 	'mission_cant'
 ]); // im over it
 
-module.exports = {
+export default {
 	name: Events.InteractionCreate,
 	async execute(rawInteraction: Interaction) {
 		if(!rawInteraction.isButton()) return;

@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, Collection, Events, GuildMember, Interaction, MessageFlags } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility';
-import { Messages } from '../utility/Messages';
+import { ServerUtility } from '../utility/ServerUtility.js';
+import { Messages } from '../utility/Messages.js';
 
-module.exports = {
+export default {
 	name: Events.InteractionCreate,
 	async execute(rawInteraction: Interaction) {
 		if(!rawInteraction.isChatInputCommand()) return;

@@ -1,10 +1,10 @@
 import { Events, GuildMember, Interaction, MessageFlags, RoleSelectMenuInteraction } from 'discord.js';
-import { EmbedManager } from '../../utility/EmbedManager';
-import { ServerUtility } from '../../utility/ServerUtility';
-import { ConfigManager } from '../../utility/ConfigManager';
-import { Messages } from '../../utility/Messages';
+import { EmbedManager } from '../../utility/EmbedManager.js';
+import { ServerUtility } from '../../utility/ServerUtility.js';
+import { ConfigManager } from '../../utility/ConfigManager.js';
+import { Messages } from '../../utility/Messages.js';
 
-module.exports = {
+export default {
 	name: Events.InteractionCreate,
 	async execute(rawInteraction: Interaction) {
 		if(!rawInteraction.isRoleSelectMenu()) return;

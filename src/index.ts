@@ -1,9 +1,10 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import * as dotenv from 'dotenv';
-import { SkynetClient } from "./objects/SkynetClient";
+import { SkynetClient } from './objects/SkynetClient.js';
 
 dotenv.config();
 
@@ -26,51 +27,74 @@ client.cooldowns = new Collection();
 client.servers = new Collection();
 client.remindersSent = new Set<string>();
 
-const foldersPath = path.join(__dirname, 'commands');
-const commandFolders = fs.readdirSync(foldersPath);
+client.setMaxListeners(20);
 
-for(const folder of commandFolders) {
-	const commandsPath = path.join(foldersPath, folder);
-	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.ts'));
-	for(const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-		const command = require(filePath);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-		if('data' in command && 'execute' in command) {
-			client.commands.set(command.data.name, command);
+async function loadCommandsAndEvents(client: any) {
+	console.log('hello')
+	const foldersPath = path.join(__dirname, 'commands');
+	const commandFolders = fs.readdirSync(foldersPath);
+
+	for (const folder of commandFolders) {
+		const commandsPath = path.join(foldersPath, folder);
+		const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.ts'));
+
+		for (const file of commandFiles) {
+			const fileUrl = pathToFileURL(path.join(commandsPath, file)).href;
+			const commandModule = await import(fileUrl);
+			const command = commandModule.default ?? commandModule;
+
+			if (command?.data && command?.execute) {
+				console.log(`Loaded command: ${command.data.name}`);
+				client.commands.set(command.data.name, command);
+			} else {
+				console.log(`[WARNING] Command at ${file} is missing "data" or "execute"`);
+			}
+		}
+	}
+
+	// Recursive helper to get all event files
+	function getAllEventFiles(dir: string): string[] {
+		const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+		return entries.flatMap(entry => {
+			const fullPath = path.join(dir, entry.name);
+			if (entry.isDirectory()) {
+				return getAllEventFiles(fullPath);
+			} else if (entry.isFile() && fullPath.endsWith('.ts')) {
+				return [fullPath];
+			} else {
+				return [];
+			}
+		});
+	}
+
+	const eventsPath = path.join(__dirname, 'events');
+	const eventFiles = getAllEventFiles(eventsPath);
+
+	for (const filePath of eventFiles) {
+		const fileUrl = pathToFileURL(filePath).href;
+		const eventModule = await import(fileUrl);
+		const event = eventModule.default ?? eventModule;
+
+		if (event?.name) {
+			console.log(`Loaded event: ${event.name}`);
+			if (event.once) {
+				client.once(event.name, (...args: any[]) => event.execute(...args));
+			} else {
+				client.on(event.name, (...args: any[]) => event.execute(...args));
+			}
 		} else {
-			console.log(`[WARNING] Command at ${filePath} is missing a required "data" or "execute" property.`);
+			console.log(`[WARNING] Event at ${filePath} is missing a "name" property.`);
 		}
 	}
 }
 
-// Recursively get all .ts files in a directory and its subdirectories
-function getAllEventFiles(dir: string): string[] {
-	const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-	return entries.flatMap(entry => {
-		const fullPath = path.join(dir, entry.name);
-		if (entry.isDirectory()) {
-			return getAllEventFiles(fullPath);
-		} else if (entry.isFile() && fullPath.endsWith('.ts')) {
-			return [fullPath];
-		} else {
-			return [];
-		}
-	});
+try {
+	await loadCommandsAndEvents(client);
+	client.login(token);
+} catch (error) {
+	console.error('Unhandled Error:', error);
 }
-
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = getAllEventFiles(eventsPath);
-
-for (const filePath of eventFiles) {
-	const event = require(filePath);
-
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
-	}
-}
-
-client.login(token);

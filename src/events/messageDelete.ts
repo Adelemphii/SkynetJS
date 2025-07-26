@@ -1,8 +1,8 @@
 import { Events, Message, PartialMessage, TextChannel } from 'discord.js';
-import { SkynetClient } from '../objects/SkynetClient';
-import { ConfigManager } from '../utility/ConfigManager';
+import { SkynetClient } from '../objects/SkynetClient.js';
+import { ConfigManager } from '../utility/ConfigManager.js';
 
-module.exports = {
+export default {
 	name: Events.MessageDelete,
 	async execute(message: Message | PartialMessage) {
 		if(!message) return;

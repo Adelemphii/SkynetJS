@@ -1,9 +1,9 @@
 import { ChatInputCommandInteraction, GuildMember, MessageFlags, SlashCommandBuilder } from 'discord.js';
-import { Messages } from '../../utility/Messages';
-import { EmbedManager } from '../../utility/EmbedManager';
-import { ServerUtility } from '../../utility/ServerUtility';
+import { Messages } from '../../utility/Messages.js';
+import { EmbedManager } from '../../utility/EmbedManager.js';
+import { ServerUtility } from '../../utility/ServerUtility.js';
 
-module.exports = {
+export default {
 	data: new SlashCommandBuilder()
 		.setName('config')
 		.setDescription('Edit the config settings'),

@@ -1,5 +1,5 @@
 import { Client, Collection } from "discord.js";
-import { GuildConfig } from './GuildConfig';
+import { GuildConfig } from './GuildConfig.js';
 
 export interface SkynetClient extends Client {
 	commands: Collection<string, any>;
