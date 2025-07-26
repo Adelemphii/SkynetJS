@@ -23,7 +23,8 @@ const interactions = new Set([
 	'edit_schedule_channel',
 	'edit_timeline_channel',
 	'edit_minutes_before_timer',
-	'edit_timeline_icon_url'
+	'edit_timeline_icon_url',
+	'go_back_serverinfo'
 ]); // im over it
 
 module.exports = {
