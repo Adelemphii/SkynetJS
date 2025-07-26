@@ -1,4 +1,4 @@
-import { Events, Interaction, Message, MessageFlags, ModalSubmitInteraction } from 'discord.js';
+import { Events, GuildMember, Interaction, Message, MessageFlags, ModalSubmitInteraction } from 'discord.js';
 import { ServerUtility } from '../../utility/ServerUtility';
 import { EmbedManager } from '../../utility/EmbedManager';
 import { Messages } from '../../utility/Messages';
@@ -13,6 +13,16 @@ module.exports = {
 
 		const { config } = ctx;
 		const interaction = rawInteraction as ModalSubmitInteraction;
+
+		const member = interaction.member as GuildMember;
+		const hasAdminRole = ServerUtility.hasAdminRole(member, config);
+		if (!hasAdminRole) {
+			await interaction.reply({
+				content: Messages.get(Messages.NO_PERMS, interaction.locale),
+				flags: MessageFlags.Ephemeral,
+			});
+			return;
+		}
 
 		const [customId, messageId] = interaction.customId.split(':');
 		const message = await interaction.channel?.messages.fetch(messageId) as Message;

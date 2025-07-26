@@ -177,7 +177,6 @@ export class Messages {
 		fr: (mission: Mission) => `Vous avez été marqué comme participant à la mission ${mission.opName} avec succès !`,
 		es: (mission: Mission) => `¡Te hemos marcado como participante en la misión ${mission.opName} con éxito!`
 	};
-
 	static readonly MAYBE_MISSION: Record<string, (mission: Mission) => string> = {
 		en: (mission: Mission) => `Marked you as maybe joining the mission: ${mission.opName}.`,
 		pl: (mission: Mission) => `Oznaczono cię jako być może dołączającego do misji: ${mission.opName}.`,
@@ -185,13 +184,20 @@ export class Messages {
 		fr: (mission: Mission) => `Vous avez été marqué comme peut-être participant à la mission ${mission.opName}.`,
 		es: (mission: Mission) => `Te hemos marcado como quizás participando en la misión ${mission.opName}.`
 	};
-
 	static readonly NOT_JOINING_MISSION: Record<string, (mission: Mission) => string> = {
 		en: (mission: Mission) => `Marked you as not joining the mission: ${mission.opName}.`,
 		pl: (mission: Mission) => `Oznaczono cię jako nie dołączającego do misji: ${mission.opName}.`,
 		de: (mission: Mission) => `Du wurdest als nicht teilnehmend an der Mission ${mission.opName} markiert.`,
 		fr: (mission: Mission) => `Vous avez été marqué comme ne participant pas à la mission ${mission.opName}.`,
 		es: (mission: Mission) => `Te hemos marcado como no participando en la misión ${mission.opName}.`
+	};
+
+	static readonly NO_PERMS: Record<string, string> = {
+		en: '❌ You do not have permission to use this.',
+		pl: '❌ Nie masz uprawnień, aby tego użyć.',
+		de: '❌ Du hast keine Berechtigung, dies zu verwenden.',
+		fr: '❌ Vous n’avez pas la permission d’utiliser ceci.',
+		es: '❌ No tienes permiso para usar esto.',
 	};
 
 	static get(message: Record<string, string>, locale: string): string;

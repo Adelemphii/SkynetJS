@@ -6,11 +6,18 @@ import { ConfigManager } from '../utility/ConfigManager';
 import { GuildConfig } from '../objects/GuildConfig';
 import { SkynetClient } from '../objects/SkynetClient';
 
+const interactions = new Set([
+	'mission_join',
+	'mission_maybe',
+	'mission_cant'
+]); // im over it
+
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(rawInteraction: Interaction) {
 		if(!rawInteraction.isButton()) return;
 		const interaction = rawInteraction as ButtonInteraction;
+		if(!interactions.has(interaction.customId)) return;
 		const ctx = ServerUtility.getInteractionContext(interaction);
 		if(!ctx) return;
 

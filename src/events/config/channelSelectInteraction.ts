@@ -1,7 +1,8 @@
-import { ChannelSelectMenuInteraction, Events, Interaction } from 'discord.js';
+import { ChannelSelectMenuInteraction, Events, GuildMember, Interaction, MessageFlags } from 'discord.js';
 import { EmbedManager } from '../../utility/EmbedManager';
 import { ServerUtility } from '../../utility/ServerUtility';
 import { ConfigManager } from '../../utility/ConfigManager';
+import { Messages } from '../../utility/Messages';
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -12,6 +13,16 @@ module.exports = {
 
 		const { config } = ctx;
 		const interaction = rawInteraction as ChannelSelectMenuInteraction;
+
+		const member = interaction.member as GuildMember;
+		const hasAdminRole = ServerUtility.hasAdminRole(member, config);
+		if (!hasAdminRole) {
+			await interaction.reply({
+				content: Messages.get(Messages.NO_PERMS, interaction.locale),
+				flags: MessageFlags.Ephemeral,
+			});
+			return;
+		}
 
 		switch(interaction.customId) {
 			case 'select_command_channel': {

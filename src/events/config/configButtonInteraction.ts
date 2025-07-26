@@ -5,7 +5,7 @@ import {
 	ButtonStyle,
 	ChannelSelectMenuBuilder,
 	ChannelType,
-	Events,
+	Events, GuildMember,
 	Interaction,
 	MessageFlags,
 	ModalBuilder,
@@ -17,11 +17,22 @@ import { Messages } from '../../utility/Messages';
 import { EmbedManager } from '../../utility/EmbedManager';
 import { ServerUtility } from '../../utility/ServerUtility';
 
+const interactions = new Set([
+	'edit_admin_role',
+	'edit_command_channel',
+	'edit_schedule_channel',
+	'edit_timeline_channel',
+	'edit_minutes_before_timer',
+	'edit_timeline_icon_url'
+]); // im over it
+
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(rawInteraction: Interaction) {
 		if(!rawInteraction.isButton()) return;
 		const interaction = rawInteraction as ButtonInteraction;
+		if(!interactions.has(interaction.customId)) return;
+
 		const ctx = ServerUtility.getInteractionContext(interaction);
 		if(!ctx) return;
 
@@ -35,6 +46,16 @@ module.exports = {
 			return;
 		}
 		if(!config) return;
+
+		const member = interaction.member as GuildMember;
+		const hasAdminRole = ServerUtility.hasAdminRole(member, config);
+		if (!hasAdminRole) {
+			await interaction.reply({
+				content: Messages.get(Messages.NO_PERMS, interaction.locale),
+				flags: MessageFlags.Ephemeral,
+			});
+			return;
+		}
 
 		switch (interaction.customId) {
 			case 'edit_admin_role': {

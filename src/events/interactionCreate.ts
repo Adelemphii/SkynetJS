@@ -1,17 +1,33 @@
-import { ChatInputCommandInteraction, Collection, Events, Interaction, MessageFlags } from 'discord.js';
+import { ChatInputCommandInteraction, Collection, Events, GuildMember, Interaction, MessageFlags } from 'discord.js';
 import { SkynetClient } from '../objects/SkynetClient';
+import { ServerUtility } from '../utility/ServerUtility';
+import { Messages } from '../utility/Messages';
 
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(rawInteraction: Interaction) {
 		if(!rawInteraction.isChatInputCommand()) return;
 		const interaction = rawInteraction as ChatInputCommandInteraction;
-		const client = interaction.client as SkynetClient;
+		const ctx = ServerUtility.getInteractionContext(interaction);
+		if(!ctx) return;
+		const { client, config } = ctx;
 
 		const command = client.commands.get(interaction.commandName);
 		if(!command) {
 			console.error(`No command matching ${interaction.commandName} was found.`);
 			return;
+		}
+
+		if(command.admin) {
+			const member = interaction.member as GuildMember;
+			const hasAdminRole = ServerUtility.hasAdminRole(member, config);
+			if (!hasAdminRole) {
+				await interaction.reply({
+					content: Messages.get(Messages.NO_PERMS, interaction.locale),
+					flags: MessageFlags.Ephemeral,
+				});
+				return;
+			}
 		}
 
 		const cooldowns = client.cooldowns;

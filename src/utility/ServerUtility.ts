@@ -1,5 +1,5 @@
 import { SkynetClient } from '../objects/SkynetClient';
-import { Interaction, Message, MessageFlags, TextChannel } from 'discord.js';
+import { GuildMember, Interaction, Message, MessageFlags, TextChannel } from 'discord.js';
 import { EmbedManager } from './EmbedManager';
 import { Mission } from '../objects/Mission';
 import { GuildConfig } from '../objects/GuildConfig';
@@ -56,6 +56,17 @@ export class ServerUtility {
 			embeds: [embed],
 			components,
 		});
+	}
+
+	static hasAdminRole(member: GuildMember, config: GuildConfig): boolean {
+		if (!member) {
+			return false;
+		}
+
+		if(config.adminRoleId) {
+			return member.roles.cache.has(config.adminRoleId);
+		}
+		return true;
 	}
 
 }
