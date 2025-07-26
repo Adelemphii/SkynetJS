@@ -30,6 +30,8 @@ module.exports = {
 			await cacheImportantMessages(client, guildConfig, guild);
 		}
 
+		console.log('Loading complete.');
+
 		setInterval(async () => {
 			for (const [, config] of client.servers.entries()) {
 				const channel = await client.channels.fetch(config.scheduleConfig.timelineChannel).catch(() => null) as TextChannel;
