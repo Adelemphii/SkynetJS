@@ -4,8 +4,12 @@ import { Messages } from './Messages';
 import { Mission } from '../objects/Mission';
 
 export class EmbedManager {
+
+	private static readonly _baseIcon: string = 'https://i.imgur.com/Rp1NRAq.png'
+
 	static serverInfo(interaction: any, config: GuildConfig) {
-		const url = config.scheduleConfig.timelineMessageIcon ?? 'https://imgur.com/a/11WUTVL';
+		const url = config.scheduleConfig.timelineMessageIcon !== "N/A"
+			? config.scheduleConfig.timelineMessageIcon : this._baseIcon;
 
 		const embed = new EmbedBuilder()
 			.setTitle(Messages.get(Messages.SERVER_INFO, interaction.locale, interaction.guild.name))
@@ -83,7 +87,7 @@ export class EmbedManager {
 		let footer = mission.modpackInfo ? `Modpack: ${mission.modpackInfo}` : 'No modpack specified';
 		if (zeus) footer += ` | Zeus: ${zeus}`;
 
-		let url = 'https://imgur.com/a/11WUTVL';
+		let url = this._baseIcon;
 		if(config && config.scheduleConfig.timelineMessageIcon) {
 			console.log('hello from the otherside')
 			url = config.scheduleConfig.timelineMessageIcon;

@@ -63,7 +63,7 @@ export class ServerUtility {
 			return false;
 		}
 
-		if(config.adminRoleId) {
+		if(config.adminRoleId && config.adminRoleId !== "N/A") {
 			return member.roles.cache.has(config.adminRoleId);
 		}
 		return true;

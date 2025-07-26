@@ -1,4 +1,4 @@
-import { Events, TextChannel } from 'discord.js';
+import { Events, Guild, TextChannel } from 'discord.js';
 import { SkynetClient } from '../objects/SkynetClient';
 import { GuildConfig } from '../objects/GuildConfig';
 import { ConfigManager } from '../utility/ConfigManager';
@@ -21,7 +21,13 @@ module.exports = {
 			}
 			client.servers.set(guild.id, guildConfig);
 
-			await cacheImportantMessages(client, guildConfig);
+			const scheduleChannelId = guildConfig.scheduleConfig.scheduleChannel;
+			const timelineChannelId = guildConfig.scheduleConfig.timelineChannel;
+			if((!scheduleChannelId || !timelineChannelId) || (scheduleChannelId === "N/A" || scheduleChannelId === "N/A")) {
+				console.log(`No schedule/timeline channel set for ${guildConfig.serverId}, [${guild.name}]`);
+				continue;
+			}
+			await cacheImportantMessages(client, guildConfig, guild);
 		}
 
 		setInterval(async () => {
@@ -57,7 +63,7 @@ module.exports = {
 	}
 }
 
-async function cacheImportantMessages(client: SkynetClient, config: GuildConfig) {
+async function cacheImportantMessages(client: SkynetClient, config: GuildConfig, guild: Guild) {
 	const channel = await client.channels.fetch(config.scheduleConfig.scheduleChannel);
 	const channel2 = await client.channels.fetch(config.scheduleConfig.timelineChannel);
 	if(!channel?.isTextBased()) return;

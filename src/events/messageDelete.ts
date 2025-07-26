@@ -11,7 +11,6 @@ module.exports = {
 			try {
 				message = await message.fetch();
 			} catch(error) {
-				console.warn('Failed to fetch partial message');
 				return;
 			}
 		}
