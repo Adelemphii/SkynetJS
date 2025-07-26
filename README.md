@@ -14,6 +14,7 @@ Skynet is a feature-rich, TypeScript-based Discord bot focused on per-server con
 
 ## 📁 Project Structure
 
+```
 src/
 ├── commands/ # Slash command definitions
 ├── events/ # Discord.js event handlers
@@ -23,6 +24,7 @@ src/
 ├── util/ # Utility functions and helpers
 ├── ScheduleConfig.ts # Manages server-specific schedule settings
 └── GuildConfig.ts # Core server configuration class
+```
 
 ## 🧰 Requirements
 
