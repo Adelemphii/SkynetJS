@@ -4,10 +4,13 @@ import { REST, Routes } from 'discord.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const token: string | undefined = process.env.NODE_ENV === 'production'
+const environment = process.env.NODE_ENV ?? 'development';
+const token: string | undefined = environment.trim() === 'production'
 	? process.env.PROD_DISCORD_TOKEN : process.env.DEV_DISCORD_TOKEN;
 
-const clientId: string | undefined = process.env.CLIENT_ID;
+const clientId: string | undefined = environment.trim() === 'production'
+	? process.env.PROD_CLIENT_ID : process.env.DEV_CLIENT_ID;
+
 const guildId: string | undefined = process.env.GUILD_ID;
 
 if(!token) {
@@ -46,8 +49,10 @@ const rest = new REST().setToken(token);
 	try {
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
+		const routes = environment.trim() === 'production'
+			? Routes.applicationCommands(clientId) : Routes.applicationGuildCommands(clientId, guildId);
 		const data = await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
+			routes,
 			{ body: commands },
 		);
 

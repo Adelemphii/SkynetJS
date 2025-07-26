@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "set NODE_ENV=production && ts-node src/index.ts",
+    "prod-deploy": "set NODE_ENV=production && ts-node deploy-commands.ts",
     "dev": "set NODE_ENV=development && ts-node src/index.ts",
     "dev-deploy": "set NODE_ENV=development && ts-node deploy-commands.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "discord.js": "^14.21.0",
     "dotenv": "^17.2.0"
