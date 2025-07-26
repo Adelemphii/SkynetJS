@@ -1,6 +1,6 @@
 # Skynet Discord Bot
 
-Skynet is a feature-rich, TypeScript-based Discord bot focused on per-server configuration, localized messaging, and interaction-driven admin control. Built with `discord.js`, it provides an extensible and organized way to manage your server's roles, channels, and scheduled actions.
+Skynet is a feature-rich, TypeScript-based Discord bot focused on per-server configuration, localized messaging, and interaction-driven admin control. Built with `discord.js`, it provides an extensible and organized way to manage your server's roles, channels, and scheduled actions. SkynetJS is a rewrite of my java Minecraft plugin [Skynet](https://github.com/Adelemphii/Skynet).
 
 ## 🌟 Features
 
@@ -11,20 +11,6 @@ Skynet is a feature-rich, TypeScript-based Discord bot focused on per-server con
 - 🧱 Modular architecture with clean separation of concerns
 - 📅 Timer system with configurable minute offset
 - 🧪 Built with TypeScript and strong typing
-
-## 📁 Project Structure
-
-```
-src/
-├── commands/ # Slash command definitions
-├── events/ # Discord.js event handlers
-├── interaction/ # Custom interaction logic (menus, modals, etc.)
-├── locale/ # Localization strings per language
-├── objects/ # Data structures and DTOs
-├── util/ # Utility functions and helpers
-├── ScheduleConfig.ts # Manages server-specific schedule settings
-└── GuildConfig.ts # Core server configuration class
-```
 
 ## 🧰 Requirements
 
