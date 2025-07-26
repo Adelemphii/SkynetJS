@@ -1,10 +1,10 @@
 import { ButtonInteraction, Events, Interaction, MessageFlags, TextChannel } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility.js';
-import { Messages } from '../utility/Messages.js';
-import { Mission, ParticipationStatus } from '../objects/Mission.js';
-import { ConfigManager } from '../utility/ConfigManager.js';
-import { GuildConfig } from '../objects/GuildConfig.js';
-import { SkynetClient } from '../objects/SkynetClient.js';
+import { ServerUtility } from '../utility/ServerUtility.ts';
+import { Messages } from '../utility/Messages.ts';
+import { Mission, ParticipationStatus } from '../objects/Mission.ts';
+import { ConfigManager } from '../utility/ConfigManager.ts';
+import { GuildConfig } from '../objects/GuildConfig.ts';
+import { SkynetClient } from '../objects/SkynetClient';
 
 const interactions = new Set([
 	'mission_join',

@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, Collection, Events, GuildMember, Interaction, MessageFlags } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility.js';
-import { Messages } from '../utility/Messages.js';
+import { ServerUtility } from '../utility/ServerUtility.ts';
+import { Messages } from '../utility/Messages.ts';
 
 export default {
 	name: Events.InteractionCreate,

@@ -1,8 +1,8 @@
 import { Events, Message, TextChannel } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility.js';
-import { EmbedManager } from '../utility/EmbedManager.js';
-import { Mission } from '../objects/Mission.js';
-import { ConfigManager } from '../utility/ConfigManager.js';
+import { ServerUtility } from '../utility/ServerUtility.ts';
+import { EmbedManager } from '../utility/EmbedManager.ts';
+import { Mission } from '../objects/Mission.ts';
+import { ConfigManager } from '../utility/ConfigManager.ts';
 
 export default {
 	name: Events.MessageCreate,

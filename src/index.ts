@@ -4,7 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import * as dotenv from 'dotenv';
-import { SkynetClient } from './objects/SkynetClient.js';
+import { SkynetClient } from './objects/SkynetClient';
 
 dotenv.config();
 

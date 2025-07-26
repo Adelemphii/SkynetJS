@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, } from 'discord.js';
-import { GuildConfig } from '../objects/GuildConfig.js';
-import { Messages } from './Messages.js';
-import { Mission } from '../objects/Mission.js';
+import { GuildConfig } from '../objects/GuildConfig.ts';
+import { Messages } from './Messages.ts';
+import { Mission } from '../objects/Mission.ts';
 
 export class EmbedManager {
 
