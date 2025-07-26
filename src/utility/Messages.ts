@@ -84,6 +84,13 @@ export class Messages {
 		fr: (config: GuildConfig) => `**ID du message de chronologie :** ${config?.scheduleConfig?.timelineMessage ?? 'Indisponible'}`,
 		es: (config: GuildConfig) => `**ID del mensaje de línea de tiempo:** ${config?.scheduleConfig?.timelineMessage ?? 'No disponible'}`,
 	};
+	static readonly TIMELINE_MESSAGE_ICON: Record<string, (config: GuildConfig) => string> = {
+		en: (config) => `**Timeline Message Icon:** ${config?.scheduleConfig?.timelineMessageIcon}`,
+		pl: (config) => `**Ikona Wiadomości na Osi Czasu:** ${config?.scheduleConfig?.timelineMessageIcon}`,
+		de: (config) => `**Zeitachsen-Nachrichtensymbol:** ${config?.scheduleConfig?.timelineMessageIcon}`,
+		fr: (config) => `**Icône du message chronologique:** ${config?.scheduleConfig?.timelineMessageIcon}`,
+		es: (config) => `**Icono del mensaje en la línea de tiempo:** ${config?.scheduleConfig?.timelineMessageIcon}`,
+	};
 	static readonly MINUTES_BEFORE_TIMER = {
 		en: (config: GuildConfig) => `**Minutes Before Timer:** ${config?.scheduleConfig?.minutesBeforeTimer ?? 'N/A'}`,
 		pl: (config: GuildConfig) => `**Minuty przed czasomierzem:** ${config?.scheduleConfig?.minutesBeforeTimer ?? 'Brak'}`,
@@ -140,6 +147,20 @@ export class Messages {
 		de: "Bitte wähle einen Textkanal.",
 		fr: "Veuillez sélectionner un canal textuel.",
 		es: "Por favor, selecciona un canal de texto.",
+	};
+	static readonly EDIT_TIMELINE_MESSAGE_ICON_PROMPT: Record<string, string> = {
+		en: 'Edit Timeline Message Icon',
+		pl: 'Edytuj ikonę wiadomości na osi czasu',
+		de: 'Symbol der Zeitachsen-Nachricht bearbeiten',
+		fr: "Modifier l'icône du message chronologique",
+		es: 'Editar el icono del mensaje de la línea de tiempo',
+	};
+	static readonly URL_SUCCESS = {
+		en: (url: string) => `Successfully set Icon to: ${url}`,
+		pl: (url: string) => `Pomyślnie ustawiono ikonę na: ${url}`,
+		de: (url: string) => `Symbol erfolgreich gesetzt auf: ${url}`,
+		fr: (url: string) => `Icône définie avec succès sur : ${url}`,
+		es: (url: string) => `Icono establecido correctamente en: ${url}`,
 	};
 	static readonly TIMER_SUCCESS = {
 		en: (message: number) => `Successfully set timer to: ${message}`,

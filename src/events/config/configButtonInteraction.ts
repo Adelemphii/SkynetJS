@@ -93,6 +93,26 @@ module.exports = {
 				await interaction.showModal(modal);
 				break;
 			}
+			case 'edit_timeline_icon_url': {
+				const urlInput = new TextInputBuilder()
+					.setCustomId('input_icon_url')
+					.setLabel(Messages.get(Messages.EDIT_TIMELINE_MESSAGE_ICON_PROMPT, interaction.locale))
+					.setPlaceholder('https://example.com/icon.png')
+					.setStyle(TextInputStyle.Short)
+					.setRequired(true)
+					.setMinLength(5)
+					.setMaxLength(300);
+
+				const row = new ActionRowBuilder<TextInputBuilder>().addComponents(urlInput);
+
+				const modal = new ModalBuilder()
+					.setCustomId(`edit_icon_url:${interaction.message.id}`)
+					.setTitle(Messages.get(Messages.EDIT_TIMELINE_MESSAGE_ICON_PROMPT, interaction.locale))
+					.addComponents(row);
+
+				await interaction.showModal(modal);
+				break;
+			}
 			case 'go_back_serverinfo': {
 				const { embed, components } = EmbedManager.serverInfo(interaction, config);
 				await interaction.update({

@@ -42,6 +42,30 @@ module.exports = {
 				await ConfigManager.saveConfig(config);
 				break;
 			}
+			case 'edit_icon_url': {
+				const url = interaction.fields.getTextInputValue('input_icon_url').trim();
+
+				// Basic validation
+				if (!url.startsWith('http://') && !url.startsWith('https://')) {
+					await interaction.reply({
+						content: Messages.get(Messages.EDIT_TIMELINE_MESSAGE_ICON_PROMPT, interaction.locale),
+						flags: MessageFlags.Ephemeral
+					});
+					return;
+				}
+
+				config.scheduleConfig.timelineMessageIcon = url;
+
+				const { embed, components } = EmbedManager.serverInfo(interaction, config);
+
+				await interaction.reply({
+					content: Messages.get(Messages.URL_SUCCESS, interaction.locale, url),
+					flags: MessageFlags.Ephemeral,
+				});
+				await message.edit({ embeds: [embed], components });
+				await ConfigManager.saveConfig(config);
+				break;
+			}
 		}
 	}
 }

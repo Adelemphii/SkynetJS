@@ -5,6 +5,8 @@ import { Mission } from '../objects/Mission';
 
 export class EmbedManager {
 	static serverInfo(interaction: any, config: GuildConfig) {
+		const url = config.scheduleConfig.timelineMessageIcon ?? 'https://imgur.com/a/11WUTVL';
+
 		const embed = new EmbedBuilder()
 			.setTitle(Messages.get(Messages.SERVER_INFO, interaction.locale, interaction.guild.name))
 			.setColor(0x5865F2)
@@ -28,12 +30,13 @@ export class EmbedManager {
 					value: [
 						Messages.get(Messages.SCHEDULE_CHANNEL, interaction.locale, config),
 						Messages.get(Messages.TIMELINE_CHANNEL, interaction.locale, config),
-						Messages.get(Messages.TIMELINE_MESSAGE, interaction.locale, config),
+						Messages.get(Messages.TIMELINE_MESSAGE_ICON, interaction.locale, config),
 						Messages.get(Messages.MINUTES_BEFORE_TIMER, interaction.locale, config),
 					].join('\n'),
 					inline: false
 				}
 			)
+			.setThumbnail(url)
 			.setTimestamp();
 
 		const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -62,18 +65,29 @@ export class EmbedManager {
 				.setCustomId('edit_minutes_before_timer')
 				.setLabel(Messages.get(Messages.EDIT_MINUTES_BEFORE_TIMER_PROMPT, interaction.locale))
 				.setStyle(ButtonStyle.Secondary),
+
+			new ButtonBuilder()
+				.setCustomId('edit_timeline_icon_url')
+				.setLabel(Messages.get(Messages.EDIT_TIMELINE_MESSAGE_ICON_PROMPT, interaction.locale))
+				.setStyle(ButtonStyle.Secondary)
 		);
 
 		return {embed, components: [row, row2]};
 	}
 
-	static async missionEmbed(mission: Mission, messageUrl: string, zeus?: string): Promise<EmbedBuilder> {
+	static async missionEmbed(mission: Mission, messageUrl: string, zeus?: string, config?: GuildConfig): Promise<EmbedBuilder> {
 		const joining = mission.getParticipantsByStatus('joining');
 		const maybe = mission.getParticipantsByStatus('maybe');
 		const notJoining = mission.getParticipantsByStatus('not_joining');
 
 		let footer = mission.modpackInfo ? `Modpack: ${mission.modpackInfo}` : 'No modpack specified';
 		if (zeus) footer += ` | Zeus: ${zeus}`;
+
+		let url = 'https://imgur.com/a/11WUTVL';
+		if(config && config.scheduleConfig.timelineMessageIcon) {
+			console.log('hello from the otherside')
+			url = config.scheduleConfig.timelineMessageIcon;
+		}
 
 		return new EmbedBuilder()
 			.setColor(0x2f3136)
@@ -103,7 +117,7 @@ export class EmbedManager {
 			)
 			.setFooter({ text: footer })
 			.setTimestamp(new Date(mission.timestamp * 1000))
-			.setThumbnail('https://cdn.discordapp.com/attachments/937817809952579664/986829890630320149/SKYBURGER_Deluxe_Patch.png');
+			.setThumbnail(url);
 	}
 
 	static buildMissionButtons(): ActionRowBuilder<ButtonBuilder> {

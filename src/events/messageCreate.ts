@@ -18,7 +18,7 @@ module.exports = {
 		const mission = Mission.parseMissionFromMessage(message);
 		if (!mission) return;
 
-		const embed = await EmbedManager.missionEmbed(mission, message.url);
+		const embed = await EmbedManager.missionEmbed(mission, message.url, undefined, config);
 		const reactionButtons = EmbedManager.buildMissionButtons();
 		const extraButtons = EmbedManager.buildExtraButtons(mission.sheetUrl);
 		console.log(extraButtons, mission.sheetUrl);

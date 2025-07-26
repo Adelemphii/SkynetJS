@@ -1,4 +1,4 @@
-import { Mission } from './Mission'; // adjust path as needed
+import { Mission } from './Mission';
 
 export class ScheduleConfig {
 
@@ -6,6 +6,7 @@ export class ScheduleConfig {
 	private _scheduleChannel: string = "N/A";
 	private _timelineChannel: string = "N/A";
 	private _timelineMessage: string = "N/A";
+	private _timelineMessageIcon: string = "N/A";
 
 	private _missions: Mission[] = [];
 
@@ -59,6 +60,14 @@ export class ScheduleConfig {
 		this._missions = value;
 	}
 
+	get timelineMessageIcon(): string {
+		return this._timelineMessageIcon;
+	}
+
+	set timelineMessageIcon(value: string) {
+		this._timelineMessageIcon = value;
+	}
+
 	addMission(mission: Mission) {
 		this._missions.push(mission);
 	}
@@ -73,6 +82,7 @@ export class ScheduleConfig {
 			scheduleChannel: this._scheduleChannel,
 			timelineChannel: this._timelineChannel,
 			timelineMessage: this._timelineMessage,
+			timelineMessageIcon: this._timelineMessageIcon,
 			missions: this._missions.map(m => m.toJSON()),
 		};
 	}
@@ -83,6 +93,7 @@ export class ScheduleConfig {
 		config.scheduleChannel = data.scheduleChannel ?? "N/A";
 		config.timelineChannel = data.timelineChannel ?? "N/A";
 		config.timelineMessage = data.timelineMessage ?? "N/A";
+		config.timelineMessageIcon = data.timelineMessageIcon ?? "N/A";
 		config.missions = Array.isArray(data.missions) ? data.missions.map((m: any) => Mission.fromJSON(m)) : [];
 		return config;
 	}

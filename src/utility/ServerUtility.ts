@@ -44,7 +44,7 @@ export class ServerUtility {
 		if(!mission.timelineMessageId) return null;
 		const timelineMessage = await timelineChannel.messages.fetch(mission.timelineMessageId);
 
-		const embed = await EmbedManager.missionEmbed(mission, scheduleMessage.url);
+		const embed = await EmbedManager.missionEmbed(mission, scheduleMessage.url, undefined, config);
 		const buttons = EmbedManager.buildMissionButtons();
 		const extraButtons = EmbedManager.buildExtraButtons(mission.sheetUrl);
 		if (!embed) return null;
