@@ -1,9 +1,9 @@
 import { Events, Message, TextChannel } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility';
-import { Mission } from '../objects/Mission';
-import { ConfigManager } from '../utility/ConfigManager';
+import { ServerUtility } from '../utility/ServerUtility.js';
+import { Mission } from '../objects/Mission.js';
+import { ConfigManager } from '../utility/ConfigManager.js';
 
-module.exports = {
+export default {
 	name: Events.MessageUpdate,
 	async execute(oldMessage: Message | null, newMessage: Message) {
 		if (!newMessage.guild || newMessage.author?.bot) return;

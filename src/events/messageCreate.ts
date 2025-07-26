@@ -1,10 +1,10 @@
 import { Events, Message, TextChannel } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility';
-import { EmbedManager } from '../utility/EmbedManager';
-import { Mission } from '../objects/Mission';
-import { ConfigManager } from '../utility/ConfigManager';
+import { ServerUtility } from '../utility/ServerUtility.js';
+import { EmbedManager } from '../utility/EmbedManager.js';
+import { Mission } from '../objects/Mission.js';
+import { ConfigManager } from '../utility/ConfigManager.js';
 
-module.exports = {
+export default {
 	name: Events.MessageCreate,
 	async execute(message: Message) {
 		if (!message.guild || message.author.bot) return;

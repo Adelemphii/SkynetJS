@@ -1,10 +1,10 @@
 import { Events, GuildMember, Interaction, Message, MessageFlags, ModalSubmitInteraction } from 'discord.js';
-import { ServerUtility } from '../../utility/ServerUtility';
-import { EmbedManager } from '../../utility/EmbedManager';
-import { Messages } from '../../utility/Messages';
-import { ConfigManager } from '../../utility/ConfigManager';
+import { ServerUtility } from '../../utility/ServerUtility.js';
+import { EmbedManager } from '../../utility/EmbedManager.js';
+import { Messages } from '../../utility/Messages.js';
+import { ConfigManager } from '../../utility/ConfigManager.js';
 
-module.exports = {
+export default {
 	name: Events.InteractionCreate,
 	async execute(rawInteraction: Interaction) {
 		if(!rawInteraction.isModalSubmit()) return;

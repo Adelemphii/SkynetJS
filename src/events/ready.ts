@@ -1,9 +1,9 @@
-import { Events, Guild, TextChannel } from 'discord.js';
-import { SkynetClient } from '../objects/SkynetClient';
-import { GuildConfig } from '../objects/GuildConfig';
-import { ConfigManager } from '../utility/ConfigManager';
+import { Events, TextChannel } from 'discord.js';
+import { SkynetClient } from '../objects/SkynetClient.js';
+import { GuildConfig } from '../objects/GuildConfig.js';
+import { ConfigManager } from '../utility/ConfigManager.js';
 
-module.exports = {
+export default {
 	name: Events.ClientReady,
 	once: true,
 	execute: async (client: SkynetClient) => {
@@ -27,7 +27,7 @@ module.exports = {
 				console.log(`No schedule/timeline channel set for ${guildConfig.serverId}, [${guild.name}]`);
 				continue;
 			}
-			await cacheImportantMessages(client, guildConfig, guild);
+			await cacheImportantMessages(client, guildConfig);
 		}
 
 		console.log('Loading complete.');
@@ -65,7 +65,7 @@ module.exports = {
 	}
 }
 
-async function cacheImportantMessages(client: SkynetClient, config: GuildConfig, guild: Guild) {
+async function cacheImportantMessages(client: SkynetClient, config: GuildConfig) {
 	const channel = await client.channels.fetch(config.scheduleConfig.scheduleChannel);
 	const channel2 = await client.channels.fetch(config.scheduleConfig.timelineChannel);
 	if(!channel?.isTextBased()) return;

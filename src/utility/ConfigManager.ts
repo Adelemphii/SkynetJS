@@ -1,6 +1,10 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { GuildConfig } from '../objects/GuildConfig';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+import { GuildConfig } from '../objects/GuildConfig.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export class ConfigManager {
 	private static readonly CONFIG_DIR = path.join(__dirname, '../../configs');

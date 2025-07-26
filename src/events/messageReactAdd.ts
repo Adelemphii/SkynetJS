@@ -1,7 +1,7 @@
 import { Events, Message, MessageFlags, MessageReaction, PartialUser, User } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility';
-import { ParticipationStatus } from '../objects/Mission';
-import { ConfigManager } from '../utility/ConfigManager';
+import { ServerUtility } from '../utility/ServerUtility.js';
+import { ParticipationStatus } from '../objects/Mission.js';
+import { ConfigManager } from '../utility/ConfigManager.js';
 
 const emojiStatusMap = new Map([
 	['🍞', 'joining'],
@@ -9,7 +9,7 @@ const emojiStatusMap = new Map([
 	['🥖', 'not_joining'],
 ]);
 
-module.exports = {
+export default {
 	name: Events.MessageReactionAdd,
 	async execute(reaction: MessageReaction, user: User | PartialUser) {
 		if (reaction.partial) {
