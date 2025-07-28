@@ -1,9 +1,9 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'url';
 
-import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
-import * as dotenv from 'dotenv';
+import { Client, Collection, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
+import dotenv from 'dotenv';
 import { SkynetClient } from './objects/SkynetClient';
 
 dotenv.config();
@@ -11,6 +11,10 @@ dotenv.config();
 const environment = process.env.NODE_ENV ?? 'development';
 const token: string | undefined = environment.trim() === 'production'
 	? process.env.PROD_DISCORD_TOKEN : process.env.DEV_DISCORD_TOKEN;
+
+const extension = environment.trim() === 'production' ? '.js' : '.ts';
+
+console.log(token)
 
 const intents = [
 	GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent,
@@ -29,22 +33,17 @@ client.remindersSent = new Set<string>();
 
 client.setMaxListeners(20);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 async function loadCommandsAndEvents(client: any) {
-	console.log('hello')
 	const foldersPath = path.join(__dirname, 'commands');
 	const commandFolders = fs.readdirSync(foldersPath);
 
 	for (const folder of commandFolders) {
 		const commandsPath = path.join(foldersPath, folder);
-		const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.ts'));
+		const commandFiles = fs.readdirSync(commandsPath);
 
 		for (const file of commandFiles) {
 			const fileUrl = pathToFileURL(path.join(commandsPath, file)).href;
-			const commandModule = await import(fileUrl);
-			const command = commandModule.default ?? commandModule;
+			const command = await import(fileUrl);
 
 			if (command?.data && command?.execute) {
 				console.log(`Loaded command: ${command.data.name}`);
@@ -63,7 +62,7 @@ async function loadCommandsAndEvents(client: any) {
 			const fullPath = path.join(dir, entry.name);
 			if (entry.isDirectory()) {
 				return getAllEventFiles(fullPath);
-			} else if (entry.isFile() && fullPath.endsWith('.ts')) {
+			} else if (entry.isFile()) {
 				return [fullPath];
 			} else {
 				return [];
@@ -76,8 +75,7 @@ async function loadCommandsAndEvents(client: any) {
 
 	for (const filePath of eventFiles) {
 		const fileUrl = pathToFileURL(filePath).href;
-		const eventModule = await import(fileUrl);
-		const event = eventModule.default ?? eventModule;
+		const event = await import(fileUrl);
 
 		if (event?.name) {
 			console.log(`Loaded event: ${event.name}`);
@@ -92,9 +90,11 @@ async function loadCommandsAndEvents(client: any) {
 	}
 }
 
-try {
-	await loadCommandsAndEvents(client);
-	client.login(token);
-} catch (error) {
-	console.error('Unhandled Error:', error);
-}
+(async () => {
+	try {
+		await loadCommandsAndEvents(client);
+		client.login(token);
+	} catch (error) {
+		console.error('Unhandled Error:', error);
+	}
+})();

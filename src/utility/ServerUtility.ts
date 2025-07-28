@@ -1,8 +1,8 @@
 import { SkynetClient } from '../objects/SkynetClient';
 import { GuildMember, Interaction, Message, MessageFlags, TextChannel } from 'discord.js';
-import { EmbedManager } from './EmbedManager.ts';
-import { Mission } from '../objects/Mission.ts';
-import { GuildConfig } from '../objects/GuildConfig.ts';
+import { EmbedManager } from './EmbedManager';
+import { Mission } from '../objects/Mission';
+import { GuildConfig } from '../objects/GuildConfig';
 
 export class ServerUtility {
 	static getInteractionContext(interaction: Interaction) {

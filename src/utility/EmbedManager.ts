@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, } from 'discord.js';
-import { GuildConfig } from '../objects/GuildConfig.ts';
-import { Messages } from './Messages.ts';
-import { Mission } from '../objects/Mission.ts';
+import { GuildConfig } from '../objects/GuildConfig';
+import { Messages } from './Messages';
+import { Mission } from '../objects/Mission';
 
 export class EmbedManager {
 
@@ -89,7 +89,6 @@ export class EmbedManager {
 
 		let url = this._baseIcon;
 		if(config && config.scheduleConfig.timelineMessageIcon) {
-			console.log('hello from the otherside')
 			url = config.scheduleConfig.timelineMessageIcon;
 		}
 

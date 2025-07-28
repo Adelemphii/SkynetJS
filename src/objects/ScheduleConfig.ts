@@ -1,4 +1,4 @@
-import { Mission } from './Mission.ts';
+import { Mission } from './Mission';
 
 export class ScheduleConfig {
 

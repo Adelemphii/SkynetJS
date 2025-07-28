@@ -1,6 +1,6 @@
 import { Locale } from 'discord.js';
-import { GuildConfig } from '../objects/GuildConfig.ts';
-import { Mission } from '../objects/Mission.ts';
+import { GuildConfig } from '../objects/GuildConfig';
+import { Mission } from '../objects/Mission';
 
 /**
  * I'm well aware this should be like a bunch of json files to read from, and it'd be WAY cleaner- but I've already done this much

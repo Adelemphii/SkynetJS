@@ -1,81 +1,80 @@
 import { Events, GuildMember, Interaction, Message, MessageFlags, ModalSubmitInteraction } from 'discord.js';
-import { ServerUtility } from '../../utility/ServerUtility.ts';
-import { EmbedManager } from '../../utility/EmbedManager.ts';
-import { Messages } from '../../utility/Messages.ts';
-import { ConfigManager } from '../../utility/ConfigManager.ts';
+import { ServerUtility } from '../../utility/ServerUtility';
+import { EmbedManager } from '../../utility/EmbedManager';
+import { Messages } from '../../utility/Messages';
+import { ConfigManager } from '../../utility/ConfigManager';
 
-export default {
-	name: Events.InteractionCreate,
-	async execute(rawInteraction: Interaction) {
-		if(!rawInteraction.isModalSubmit()) return;
-		const ctx = ServerUtility.getInteractionContext(rawInteraction);
-		if(!ctx) return;
+export const name = Events.InteractionCreate;
 
-		const { config } = ctx;
-		const interaction = rawInteraction as ModalSubmitInteraction;
+export async function execute(rawInteraction: Interaction) {
+	if(!rawInteraction.isModalSubmit()) return;
+	const ctx = ServerUtility.getInteractionContext(rawInteraction);
+	if(!ctx) return;
 
-		const member = interaction.member as GuildMember;
-		const hasAdminRole = ServerUtility.hasAdminRole(member, config);
-		if (!hasAdminRole) {
+	const { config } = ctx;
+	const interaction = rawInteraction as ModalSubmitInteraction;
+
+	const member = interaction.member as GuildMember;
+	const hasAdminRole = ServerUtility.hasAdminRole(member, config);
+	if (!hasAdminRole) {
+		await interaction.reply({
+			content: Messages.get(Messages.NO_PERMS, interaction.locale),
+			flags: MessageFlags.Ephemeral,
+		});
+		return;
+	}
+
+	const [customId, messageId] = interaction.customId.split(':');
+	const message = await interaction.channel?.messages.fetch(messageId) as Message;
+
+	switch(customId) {
+		case 'edit_timer': {
+			const minutes = parseInt(interaction.fields.getTextInputValue('input_minutes_before'), 10);
+
+			if (isNaN(minutes) || minutes <= 0) {
+				await interaction.reply({
+					content: Messages.get(Messages.ENTER_MINUTES_PROMPT, interaction.locale),
+					flags: MessageFlags.Ephemeral
+				});
+				return;
+			}
+			config.scheduleConfig.minutesBeforeTimer = minutes;
+			const { embed, components } = EmbedManager.serverInfo(interaction, config);
 			await interaction.reply({
-				content: Messages.get(Messages.NO_PERMS, interaction.locale),
+				content: Messages.get(Messages.TIMER_SUCCESS, interaction.locale, minutes),
+				flags: MessageFlags.Ephemeral,
+			})
+			await message.edit({
+				embeds: [embed],
+				components,
+			})
+
+			await ConfigManager.saveConfig(config);
+			break;
+		}
+		case 'edit_icon_url': {
+			const url = interaction.fields.getTextInputValue('input_icon_url').trim();
+
+			// Basic validation
+			if (!url.startsWith('http://') && !url.startsWith('https://')) {
+				await interaction.reply({
+					content: Messages.get(Messages.EDIT_TIMELINE_MESSAGE_ICON_PROMPT, interaction.locale),
+					flags: MessageFlags.Ephemeral
+				});
+				return;
+			}
+
+			config.scheduleConfig.timelineMessageIcon = url;
+
+			const { embed, components } = EmbedManager.serverInfo(interaction, config);
+
+			await interaction.reply({
+				content: Messages.get(Messages.URL_SUCCESS, interaction.locale, url),
 				flags: MessageFlags.Ephemeral,
 			});
-			return;
-		}
-
-		const [customId, messageId] = interaction.customId.split(':');
-		const message = await interaction.channel?.messages.fetch(messageId) as Message;
-
-		switch(customId) {
-			case 'edit_timer': {
-				const minutes = parseInt(interaction.fields.getTextInputValue('input_minutes_before'), 10);
-
-				if (isNaN(minutes) || minutes <= 0) {
-					await interaction.reply({
-						content: Messages.get(Messages.ENTER_MINUTES_PROMPT, interaction.locale),
-						flags: MessageFlags.Ephemeral
-					});
-					return;
-				}
-				config.scheduleConfig.minutesBeforeTimer = minutes;
-				const { embed, components } = EmbedManager.serverInfo(interaction, config);
-				await interaction.reply({
-					content: Messages.get(Messages.TIMER_SUCCESS, interaction.locale, minutes),
-					flags: MessageFlags.Ephemeral,
-				})
-				await message.edit({
-					embeds: [embed],
-					components,
-				})
-
-				await ConfigManager.saveConfig(config);
-				break;
-			}
-			case 'edit_icon_url': {
-				const url = interaction.fields.getTextInputValue('input_icon_url').trim();
-
-				// Basic validation
-				if (!url.startsWith('http://') && !url.startsWith('https://')) {
-					await interaction.reply({
-						content: Messages.get(Messages.EDIT_TIMELINE_MESSAGE_ICON_PROMPT, interaction.locale),
-						flags: MessageFlags.Ephemeral
-					});
-					return;
-				}
-
-				config.scheduleConfig.timelineMessageIcon = url;
-
-				const { embed, components } = EmbedManager.serverInfo(interaction, config);
-
-				await interaction.reply({
-					content: Messages.get(Messages.URL_SUCCESS, interaction.locale, url),
-					flags: MessageFlags.Ephemeral,
-				});
-				await message.edit({ embeds: [embed], components });
-				await ConfigManager.saveConfig(config);
-				break;
-			}
+			await message.edit({ embeds: [embed], components });
+			await ConfigManager.saveConfig(config);
+			break;
 		}
 	}
 }
