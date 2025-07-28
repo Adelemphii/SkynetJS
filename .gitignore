@@ -4,3 +4,4 @@
 
 /src/generated/prisma
 /configs/
+dist/
