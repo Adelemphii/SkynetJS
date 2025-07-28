@@ -1,0 +1,13 @@
+services:
+  skynetjs:
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev
+    ports:
+      - "9229:9229"
+    env_file:
+      - .env

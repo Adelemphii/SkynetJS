@@ -23,22 +23,24 @@ if(!guildId) {
 	throw new Error('GuildId is not set in .env.');
 }
 
-const commands = [];
+const commands: any[] = [];
 
-const foldersPath = path.join(__dirname, 'src/commands');
-const commandFolders = fs.readdirSync(foldersPath);
+async function collectCommands() {
+	const foldersPath = path.join(__dirname, 'src/commands');
+	const commandFolders = fs.readdirSync(foldersPath);
 
-for(const folder of commandFolders) {
-	const commandsPath = path.join(foldersPath, folder);
-	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.ts'));
-	for(const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-		const command = await import(filePath);
+	for(const folder of commandFolders) {
+		const commandsPath = path.join(foldersPath, folder);
+		const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.ts'));
+		for(const file of commandFiles) {
+			const filePath = path.join(commandsPath, file);
+			const command = await import(filePath);
 
-		if('data' in command && 'execute' in command) {
-			commands.push(command.data.toJSON());
-		} else {
-			console.log(`[WARNING] Command at ${filePath} is missing a required "data" or "execute" property.`);
+			if('data' in command && 'execute' in command) {
+				commands.push(command.data.toJSON());
+			} else {
+				console.log(`[WARNING] Command at ${filePath} is missing a required "data" or "execute" property.`);
+			}
 		}
 	}
 }
@@ -47,6 +49,8 @@ const rest = new REST().setToken(token);
 
 (async () => {
 	try {
+		await collectCommands();
+
 		console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
 		const routes = environment.trim() === 'production'

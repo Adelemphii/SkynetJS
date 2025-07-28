@@ -1,9 +1,9 @@
 import { ButtonInteraction, Events, Interaction, MessageFlags, TextChannel } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility.ts';
-import { Messages } from '../utility/Messages.ts';
-import { Mission, ParticipationStatus } from '../objects/Mission.ts';
-import { ConfigManager } from '../utility/ConfigManager.ts';
-import { GuildConfig } from '../objects/GuildConfig.ts';
+import { ServerUtility } from '../utility/ServerUtility';
+import { Messages } from '../utility/Messages';
+import { Mission, ParticipationStatus } from '../objects/Mission';
+import { ConfigManager } from '../utility/ConfigManager';
+import { GuildConfig } from '../objects/GuildConfig';
 import { SkynetClient } from '../objects/SkynetClient';
 
 const interactions = new Set([
@@ -12,40 +12,39 @@ const interactions = new Set([
 	'mission_cant'
 ]); // im over it
 
-export default {
-	name: Events.InteractionCreate,
-	async execute(rawInteraction: Interaction) {
-		if(!rawInteraction.isButton()) return;
-		const interaction = rawInteraction as ButtonInteraction;
-		if(!interactions.has(interaction.customId)) return;
-		const ctx = ServerUtility.getInteractionContext(interaction);
-		if(!ctx) return;
+export const name = Events.InteractionCreate;
 
-		const { client, config } = ctx;
-		const guildId = interaction.guildId;
-		if(!guildId) {
-			await interaction.reply({
-				content: Messages.get(Messages.SERVER_ONLY, interaction.locale),
-				flags: MessageFlags.Ephemeral,
-			});
-			return;
-		}
-		if(!config) return;
+export async function execute(rawInteraction: Interaction) {
+	if(!rawInteraction.isButton()) return;
+	const interaction = rawInteraction as ButtonInteraction;
+	if(!interactions.has(interaction.customId)) return;
+	const ctx = ServerUtility.getInteractionContext(interaction);
+	if(!ctx) return;
 
-		switch (interaction.customId) {
-			case 'mission_join':
-				await handleMissionParticipation(interaction, client, config, 'joining', Messages.JOIN_MISSION);
-				break;
-			case 'mission_maybe':
-				await handleMissionParticipation(interaction, client, config, 'maybe', Messages.MAYBE_MISSION);
-				break;
-			case 'mission_cant':
-				await handleMissionParticipation(interaction, client, config, 'not_joining', Messages.NOT_JOINING_MISSION);
-				break;
-		}
-
-		await ConfigManager.saveConfig(config);
+	const { client, config } = ctx;
+	const guildId = interaction.guildId;
+	if(!guildId) {
+		await interaction.reply({
+			content: Messages.get(Messages.SERVER_ONLY, interaction.locale),
+			flags: MessageFlags.Ephemeral,
+		});
+		return;
 	}
+	if(!config) return;
+
+	switch (interaction.customId) {
+		case 'mission_join':
+			await handleMissionParticipation(interaction, client, config, 'joining', Messages.JOIN_MISSION);
+			break;
+		case 'mission_maybe':
+			await handleMissionParticipation(interaction, client, config, 'maybe', Messages.MAYBE_MISSION);
+			break;
+		case 'mission_cant':
+			await handleMissionParticipation(interaction, client, config, 'not_joining', Messages.NOT_JOINING_MISSION);
+			break;
+	}
+
+	await ConfigManager.saveConfig(config);
 }
 
 async function handleMissionParticipation(interaction: ButtonInteraction, client: SkynetClient, config: GuildConfig, status: ParticipationStatus,

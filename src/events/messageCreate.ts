@@ -1,41 +1,40 @@
 import { Events, Message, TextChannel } from 'discord.js';
-import { ServerUtility } from '../utility/ServerUtility.ts';
-import { EmbedManager } from '../utility/EmbedManager.ts';
-import { Mission } from '../objects/Mission.ts';
-import { ConfigManager } from '../utility/ConfigManager.ts';
+import { ServerUtility } from '../utility/ServerUtility';
+import { EmbedManager } from '../utility/EmbedManager';
+import { Mission } from '../objects/Mission';
+import { ConfigManager } from '../utility/ConfigManager';
 
-export default {
-	name: Events.MessageCreate,
-	async execute(message: Message) {
-		if (!message.guild || message.author.bot) return;
+export const name = Events.MessageCreate;
 
-		const ctx = ServerUtility.getContext(message);
-		if (!ctx) return;
-		const { client, config } = ctx;
+export async function execute(message: Message) {
+	if (!message.guild || message.author.bot) return;
 
-		if (message.channel.id !== config.scheduleConfig.scheduleChannel) return;
+	const ctx = ServerUtility.getContext(message);
+	if (!ctx) return;
+	const { client, config } = ctx;
 
-		const mission = Mission.parseMissionFromMessage(message);
-		if (!mission) return;
+	if (message.channel.id !== config.scheduleConfig.scheduleChannel) return;
 
-		const embed = await EmbedManager.missionEmbed(mission, message.url, undefined, config);
-		const reactionButtons = EmbedManager.buildMissionButtons();
-		const extraButtons = EmbedManager.buildExtraButtons(mission.sheetUrl);
-		console.log(extraButtons, mission.sheetUrl);
+	const mission = Mission.parseMissionFromMessage(message);
+	if (!mission) return;
 
-		const timelineChannel = await client.channels.fetch(config.scheduleConfig.timelineChannel) as TextChannel;
-		if (!timelineChannel || !embed) return;
+	const embed = await EmbedManager.missionEmbed(mission, message.url, undefined, config);
+	const reactionButtons = EmbedManager.buildMissionButtons();
+	const extraButtons = EmbedManager.buildExtraButtons(mission.sheetUrl);
+	console.log(extraButtons, mission.sheetUrl);
 
-		const components = [reactionButtons];
-		if(extraButtons) components.push(extraButtons);
-		const sent = await timelineChannel.send({
-			embeds: [embed],
-			components,
-		});
+	const timelineChannel = await client.channels.fetch(config.scheduleConfig.timelineChannel) as TextChannel;
+	if (!timelineChannel || !embed) return;
 
-		mission.timelineMessageId = sent.id;
-		config.scheduleConfig.addMission(mission);
+	const components = [reactionButtons];
+	if(extraButtons) components.push(extraButtons);
+	const sent = await timelineChannel.send({
+		embeds: [embed],
+		components,
+	});
 
-		await ConfigManager.saveConfig(config);
-	}
+	mission.timelineMessageId = sent.id;
+	config.scheduleConfig.addMission(mission);
+
+	await ConfigManager.saveConfig(config);
 }
