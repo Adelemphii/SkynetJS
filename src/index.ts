@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'url';
 
-import { Client, Collection, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
+import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import dotenv from 'dotenv';
 import { SkynetClient } from './objects/SkynetClient';
 
