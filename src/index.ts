@@ -12,8 +12,6 @@ const environment = process.env.NODE_ENV ?? 'development';
 const token: string | undefined = environment.trim() === 'production'
 	? process.env.PROD_DISCORD_TOKEN : process.env.DEV_DISCORD_TOKEN;
 
-const extension = environment.trim() === 'production' ? '.js' : '.ts';
-
 console.log(token)
 
 const intents = [
