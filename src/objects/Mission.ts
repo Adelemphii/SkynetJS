@@ -17,6 +17,7 @@ export class Mission {
 		public modpackInfo?: string,
 		public timelineMessageId?: string,
 		public sheetUrl?: string,
+		public zeus?: string,
 		private participants: Map<string, ParticipationStatus> = new Map(),
 	) {}
 
@@ -51,6 +52,7 @@ export class Mission {
 			modpackInfo: this.modpackInfo,
 			timelineMessageId: this.timelineMessageId,
 			sheetUrl: this.sheetUrl,
+			zeus: this.zeus,
 			participants: this.getAllParticipants(),
 		};
 	}
@@ -65,6 +67,7 @@ export class Mission {
 			data.modpackInfo,
 			data.timelineMessageId,
 			data.sheetUrl,
+			data.zeus,
 			new Map()
 		);
 
@@ -87,12 +90,12 @@ export class Mission {
 		// Extract Sheet/Spreadsheet URL (if any)
 		let sheetUrl: string | undefined = undefined;
 		for (const line of lines) {
-			if (/^(Sheet|Spreadsheet):/i.test(line)) {
-				const match = line.match(/(https?:\/\/\S+)/);
-				if (match) {
-					sheetUrl = match[1];
-					break;
-				}
+			const match = line.match(
+				/https?:\/\/docs\.google\.com\/spreadsheets\/d\/[A-Za-z0-9_-]+(?:\/\S*)?/i
+			)
+			if (match) {
+				sheetUrl = match[0];
+				break;
 			}
 		}
 
@@ -131,6 +134,7 @@ export class Mission {
 
 		const mission = new Mission(message.id, opName, unixTimestamp, loreLines, false, modpackInfo);
 		mission.sheetUrl = sheetUrl;
+		mission.zeus = message.author.displayName;
 		return mission;
 	}
 }

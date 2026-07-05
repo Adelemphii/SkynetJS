@@ -79,13 +79,13 @@ export class EmbedManager {
 		return {embed, components: [row, row2]};
 	}
 
-	static async missionEmbed(mission: Mission, messageUrl: string, zeus?: string, config?: GuildConfig): Promise<EmbedBuilder> {
+	static async missionEmbed(mission: Mission, messageUrl: string, config?: GuildConfig): Promise<EmbedBuilder> {
 		const joining = mission.getParticipantsByStatus('joining');
 		const maybe = mission.getParticipantsByStatus('maybe');
 		const notJoining = mission.getParticipantsByStatus('not_joining');
 
 		let footer = mission.modpackInfo ? `Modpack: ${mission.modpackInfo}` : 'No modpack specified';
-		if (zeus) footer += ` | Zeus: ${zeus}`;
+		if (mission.zeus) footer += ` | Zeus: ${mission.zeus}`;
 
 		let url = this._baseIcon;
 		if(config && config.scheduleConfig.timelineMessageIcon) {
@@ -119,7 +119,6 @@ export class EmbedManager {
 				}
 			)
 			.setFooter({ text: footer })
-			.setTimestamp(new Date(mission.timestamp * 1000))
 			.setThumbnail(url);
 	}
 
