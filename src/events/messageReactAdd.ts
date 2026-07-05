@@ -39,6 +39,10 @@ export async function execute(reaction: MessageReaction, user: User | PartialUse
 	const { client, config } = ctx;
 
 	if (reaction.message.channel.id !== config.scheduleConfig.scheduleChannel) return;
+	if (reaction.emoji.name === '❌' && reactionMessage.author === user) {
+		await reaction.message.delete()
+		return;
+	}
 
 	const status = emojiStatusMap.get(reaction.emoji.name as string) as ParticipationStatus;
 	if (!status) return;

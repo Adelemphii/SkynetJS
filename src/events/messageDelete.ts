@@ -4,7 +4,7 @@ import { ConfigManager } from '../utility/ConfigManager';
 
 export const name = Events.MessageDelete;
 
-async function execute(message: Message | PartialMessage) {
+export async function execute(message: Message | PartialMessage) {
 	if(!message) return;
 
 	if(message.partial) {
