@@ -89,7 +89,7 @@ async function loadCommandsAndEvents(client: any) {
 (async () => {
 	try {
 		await loadCommandsAndEvents(client);
-		client.login(token);
+		await client.login(token);
 	} catch (error) {
 		console.error('Unhandled Error:', error);
 	}

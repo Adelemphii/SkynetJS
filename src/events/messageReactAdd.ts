@@ -54,6 +54,4 @@ export async function execute(reaction: MessageReaction, user: User | PartialUse
 
 	await ConfigManager.saveConfig(config);
 	await ServerUtility.updateMissionEmbed(mission, config, client);
-
-	await reaction.remove();
 }

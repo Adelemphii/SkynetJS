@@ -3,6 +3,7 @@ import { GuildMember, Interaction, Message, MessageFlags, TextChannel } from 'di
 import { EmbedManager } from './EmbedManager';
 import { Mission } from '../objects/Mission';
 import { GuildConfig } from '../objects/GuildConfig';
+import { ConfigManager } from './ConfigManager';
 
 export class ServerUtility {
 	static getInteractionContext(interaction: Interaction) {
@@ -56,6 +57,36 @@ export class ServerUtility {
 			embeds: [embed],
 			components,
 		});
+	}
+
+	static async fetchAndCreateOrUpdateEmbed(message: Message, config: GuildConfig, client: SkynetClient) {
+		let mission: Mission | undefined = config.scheduleConfig.getMissionByScheduleMessageId(message.id);
+		if (mission) {
+			return await ServerUtility.updateMissionEmbed(mission, config, client);
+		}
+
+		mission = Mission.parseMissionFromMessage(message);
+		if (!mission) return undefined;
+
+		const embed = await EmbedManager.missionEmbed(mission, message.url, config);
+		const reactionButtons = EmbedManager.buildMissionButtons();
+		const extraButtons = EmbedManager.buildExtraButtons(mission.sheetUrl);
+
+		const timelineChannel = await client.channels.fetch(config.scheduleConfig.timelineChannel) as TextChannel;
+		if (!timelineChannel || !embed) return undefined;
+
+		const components = [reactionButtons];
+		if(extraButtons) components.push(extraButtons);
+		const sent = await timelineChannel.send({
+			embeds: [embed],
+			components,
+		});
+
+		mission.timelineMessageId = sent.id;
+		config.scheduleConfig.addMission(mission);
+
+		await ConfigManager.saveConfig(config);
+		return sent;
 	}
 
 	static hasAdminRole(member: GuildMember, config: GuildConfig): boolean {

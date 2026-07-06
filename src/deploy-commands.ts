@@ -2,6 +2,8 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { REST, Routes } from 'discord.js';
 import * as dotenv from 'dotenv';
+import { pathToFileURL } from 'url';
+
 dotenv.config();
 
 const environment = process.env.NODE_ENV ?? 'development';
@@ -34,7 +36,8 @@ async function collectCommands() {
 		const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.ts'));
 		for(const file of commandFiles) {
 			const filePath = path.join(commandsPath, file);
-			const command = await import(filePath);
+			const fileUrl = pathToFileURL(filePath).href;
+			const command = await import(fileUrl);
 
 			if('data' in command && 'execute' in command) {
 				commands.push(command.data.toJSON());

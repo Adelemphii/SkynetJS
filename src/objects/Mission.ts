@@ -83,7 +83,7 @@ export class Mission {
 		return mission;
 	}
 
-	static parseMissionFromMessage(message: Message): Mission | null {
+	static parseMissionFromMessage(message: Message): Mission | undefined {
 		const content = message.content;
 		const lines = content.split('\n').map(line => line.trim());
 
@@ -125,8 +125,8 @@ export class Mission {
 		}
 
 		const opLine = filteredLines[currentLineIndex];
-		const opMatch = opLine.match(/^(.*?)\s*(?:\|\s*)?<t:(\d+):?[tTdDfFR]?>$/);
-		if (!opMatch) return null;
+		const opMatch = opLine.match(/^(?:@everyone\s+|@here\s+)?(.*?)\s*(?:\|\s*)?<t:(\d+):?[tTdDfFR]?>$/);
+		if (!opMatch) return undefined;
 
 		const opName = opMatch[1];
 		const unixTimestamp = parseInt(opMatch[2], 10);
