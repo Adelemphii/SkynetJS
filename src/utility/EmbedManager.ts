@@ -103,17 +103,17 @@ export class EmbedManager {
 					value: mission.loreLines.length > 0 ? mission.loreLines.join('\n') : '*No additional details provided.*',
 				},
 				{
-					name: '🍞 Joining',
+					name: `🍞 Joining (${joining.length})`,
 					value: joining.length > 0 ? joining.map(id => `<@${id}>`).join(', ') : '_No one yet._',
 					inline: true
 				},
 				{
-					name: '🫓 Maybe',
+					name: `🫓 Maybe (${maybe.length})`,
 					value: maybe.length > 0 ? maybe.map(id => `<@${id}>`).join(', ') : '_No one yet._',
 					inline: true
 				},
 				{
-					name: '🥖 Not Joining',
+					name: `🥖 Not Joining (${notJoining.length})`,
 					value: notJoining.length > 0 ? notJoining.map(id => `<@${id}>`).join(', ') : '_No one yet._',
 					inline: true
 				}
