@@ -104,17 +104,17 @@ export class EmbedManager {
 				},
 				{
 					name: `🍞 Joining (${joining.length})`,
-					value: joining.length > 0 ? joining.map(id => `<@${id}>`).join(', ') : '_No one yet._',
+					value: joining.length > 0 ? joining.map(id => `<@${id}>`).join(' ') : '_No one yet._',
 					inline: true
 				},
 				{
 					name: `🫓 Maybe (${maybe.length})`,
-					value: maybe.length > 0 ? maybe.map(id => `<@${id}>`).join(', ') : '_No one yet._',
+					value: maybe.length > 0 ? maybe.map(id => `<@${id}>`).join(' ') : '_No one yet._',
 					inline: true
 				},
 				{
 					name: `🥖 Not Joining (${notJoining.length})`,
-					value: notJoining.length > 0 ? notJoining.map(id => `<@${id}>`).join(', ') : '_No one yet._',
+					value: notJoining.length > 0 ? notJoining.map(id => `<@${id}>`).join(' ') : '_No one yet._',
 					inline: true
 				}
 			)
