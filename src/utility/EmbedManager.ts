@@ -92,6 +92,33 @@ export class EmbedManager {
 			url = config.scheduleConfig.timelineMessageIcon;
 		}
 
+		const suffix = '\n*(Read main message for more.)*';
+		let lore = mission.loreLines.length > 0
+			? mission.loreLines.join('\n')
+			: '*No additional details provided.*';
+
+		lore = lore
+			.replace(/```[\s\S]*?```/g, "")      // Code blocks
+			.replace(/`([^`]*)`/g, "$1")         // Inline code
+			.replace(/^#{1,6}\s+/gm, "")         // Headers
+			.replace(/(\*\*|__|\*|_|~~)/g, "")   // Bold, italic, underline, strikethrough
+			.replace(/^\s*>\s?/gm, "")           // Blockquotes
+			.replace(/^\s*[-*+]\s+/gm, "• ")     // Bullet lists
+			.replace(/\[(.*?)\]\(.*?\)/g, "$1")  // Markdown links
+			.trim();
+
+		if(lore.length > 1024) {
+			const maxLength = 1024 - suffix.length;
+			lore = lore.slice(0, maxLength);
+
+			const lastNewline = lore.lastIndexOf("\n");
+			if (lastNewline !== -1) {
+				lore = lore.slice(0, lastNewline);
+			}
+
+			lore += suffix;
+		}
+
 		return new EmbedBuilder()
 			.setColor(0x2f3136)
 			.setTitle(`📜 ${mission.opName}`)
@@ -100,7 +127,7 @@ export class EmbedManager {
 			.addFields(
 				{
 					name: '📖 Lore / Details',
-					value: mission.loreLines.length > 0 ? mission.loreLines.join('\n') : '*No additional details provided.*',
+					value: lore,
 				},
 				{
 					name: `🍞 Joining (${joining.length})`,
